@@ -1,0 +1,16 @@
+body{
+    padding:0;
+    margin: 0;
+    background-color: rgb(229, 231, 233  );
+}
+#product
+{
+    color:green;
+}
+.table
+{
+    background: rgb(248, 196, 113);
+    border-radius: 25px;
+    border:2px solid rgb(250, 215, 160);
+    
+}
