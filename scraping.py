@@ -12,7 +12,7 @@ flipkart_rating_list = []
 
 
 item = input("enter product:")
-value = item.replace(" ","")
+value = item.replace(" ", "")
 
 #model_name = input("Enter model:")
 payload = {'k': value}
@@ -60,11 +60,22 @@ for price_set in amazon_price_div:
 for rating_set in amazon_rating_div:
     amazon_rating_list.append(rating_set.text)
 
+# html list 
+li_to_title = "<li class='list-group-item'><div class='container'><div class='row'><div class='col-md-12 text-justify'><span class='list-heading'>"
+title_to_rating = "</span></div></div><div class='row'><div class='col-md-8 pt-2 font-italic'><span class='list-rating'>"
+rating_to_price = "</span></div><div class='col-md-4 pt-2'><span class='list-price'>"
+price_to_li = "</span></div></div></div></li>"
+data_not_found = "<li class='list-group-item'>Data Not Found Due To Some Reason</li>"
 
-amazon_str=""
-for amazon_index in range(1,len(amazon_name_list)):
-    amazon_str = amazon_str+'<tr>'+ '<td>'+ amazon_name_list[amazon_index] +'</td>' +'<td>'+ amazon_price_list[amazon_index] + '</td>'+'<td>' + amazon_rating_list[amazon_index] +'</td>' +'</tr>'
 
+amazon_str = ""
+if len(amazon_name_list)>0:
+    for amazon_index in range(1, len(amazon_name_list)):
+        amazon_str = amazon_str + li_to_title + amazon_name_list[amazon_index] + title_to_rating + \
+            amazon_rating_list[amazon_index]+ rating_to_price+'<td>' + \
+            amazon_price_list[amazon_index] + price_to_li
+else:
+    amazon_str = amazon_str + data_not_found
 
 # for amazon_index in range(1,len(amazon_name_list)):
     # print(amazon_name_list[amazon_index])
@@ -97,82 +108,100 @@ for rating_set in flipkart_rating_div:
 
 
 flipkart_str = ""
-for flipkart_index in range(1,len(flipkart_product_list)):
-    flipkart_str = flipkart_str+'<tr>'+'<td>'+flipkart_product_list[flipkart_index]+'</td>'+'<td>'+flipkart_price_list[flipkart_index] +'</td>' +'<td>'+flipkart_rating_list[flipkart_index] +'</td>' +'</tr>'
-
-
+if len(flipkart_product_list)>0:
+    for flipkart_index in range(1, len(flipkart_product_list)):
+        flipkart_str = flipkart_str + li_to_title + flipkart_product_list[flipkart_index] + title_to_rating + \
+            flipkart_rating_list[flipkart_index] + rating_to_price + \
+            flipkart_price_list[flipkart_index] + price_to_li
+else:
+    flipkart_str = flipkart_str + data_not_found
 
 html_code = """
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <head>
+        <title>Product Comparison</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-
-    <title>webscriping</title>
-  </head>
-  <body>
-    <h1 class="display-4 text-center"><span id="product">Products:"""+str(item)+"""</span></h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-5">
-                <table class="table table-striped">
-                   <tr>
-                        <th>amazon</th>
-                        <th><a href="""+str(amazon_response.url)+"""><button class="btn btn-primary">Go To</button></a></th>
-                        
-                    </tr>
-                    <tr>
-                    <td><b>product name</td>
-                    <td><b>price</td>
-                    <td><b>rating</td>
-                    </tr>
-                    """+str(amazon_str)+"""
-                    
-                     
-
-
-                </table>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="display-3 text-center">Product:"""+str(item)+"""</h3>
+                </div>
             </div>
-            
-            <div class="col-md-5">
-               <table class="table table-striped">
-                   <tr class="table table-striped ">
-                        <th>flipkart</th>
-                        <th><a href="""+str(flipkart_response.url)+"""><button class="btn btn-primary">Go To</button></a></th>
-                    </tr>
-                    <tr>
-                    <td><b>product name</td>
-                    <td><b>price</td>
-                    <td><b>rating</td>
-                    </tr>
-                    """+str(flipkart_str)+"""
-                                        
-
-
-                </table>
-            </div>
-            <div class="col-md-1"></div>
         </div>
-    </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+
+		<!--Amazon-->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-5">
+                    <div class="content">
+                        <ul class="list-group">
+                            <li class="list-group-item bg-info"><span class="font-weight-bold">Amazon</span>
+                                
+                            </li>
+                            <div class="scroll-list">
+								"""+str(amazon_str)+"""
+                            </div>
+                            <li class="list-group-item bg-info">
+                                <a href="""+str(amazon_response.url)+""" class="btn btn-success">Go to Website</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+				<!--Flipkart-->
+				
+                <div class="col-md-5">
+
+                    <ul class="list-group">
+                        <div class="content">
+                            <li class="list-group-item bg-info"><span class="font-weight-bold">Flipkart</span>
+                                
+                            </li>
+                            <div class="scroll-list">
+                                """+str(flipkart_str)+"""
+                            </div>
+                            <li class="list-group-item bg-info">
+                                <a href="""+str(flipkart_response.url)+""" class="btn btn-success">Go to Website</a>
+                            </li>
+                        </div>
+                    </ul>
+
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    </body>
+
 </html>
+
 """
 
-#write on a file
-myfile = open('output.html', 'w',encoding="utf-8")
+# write on a file
+myfile = open('output.html', 'w', encoding="utf-8")
 myfile.write(html_code)
 myfile.close()
-#view on browser
+# view on browser
 webbrowser.open('output.html')
